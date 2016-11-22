@@ -1,2 +1,2 @@
-# PimpMyJira
+# PimpMyJira!
 Script for JIRA utilities
