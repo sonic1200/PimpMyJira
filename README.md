@@ -11,7 +11,7 @@ Feel free to contribute by sending PRs or forking it :-)
 
 # How To Install
 
-Please folow the Install Guide which is available here : TBD...
+Please folow the Install Guide which is available here : ['install'](https://github.com/sonic1200/PimpMyJira/blob/master/INSTALL.md)
 
 # Usage
 
