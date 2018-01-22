@@ -22,6 +22,8 @@ Please folow the Install Guide which is available here : ['install'](https://git
 - For configuring Jira card colors, on your Board Configuration, change the colors for each type in the section ['Card colors'](https://confluence.atlassian.com/agile067/jira-agile-user-s-guide/configuring-a-board/customising-cards).
 - You can activate or deactivate PimpMyJira! features in the 'configuration section' of the UserScript.
 
+# Screenshot of current features
+![Kanban Board](https://github.com/sonic1200/PimpMyJira/raw/master/screen1.png)
 
 # Versions
 - **Version 3.0** : New code architecture and refactoring for better DOM change detection that only trigger when needed. This should use less CPU and need less refresh on the page (rewrite page only when needed).
