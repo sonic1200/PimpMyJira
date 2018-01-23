@@ -23,7 +23,11 @@ Please folow the Install Guide which is available here : ['install'](https://git
 - You can activate or deactivate PimpMyJira! features in the 'configuration section' of the UserScript.
 
 # Screenshot of current features
+**Kanban View :**
 ![Kanban Board](https://github.com/sonic1200/PimpMyJira/raw/master/screen1.png)
+
+**Backlog View :**
+![Backlog Board](https://github.com/sonic1200/PimpMyJira/raw/master/screen2.png)
 
 # Versions
 - **Version 3.0** : New code architecture and refactoring for better DOM change detection that only trigger when needed. This should use less CPU and need less refresh on the page (rewrite page only when needed).
