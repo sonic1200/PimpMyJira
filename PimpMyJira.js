@@ -156,6 +156,12 @@ function resizablePanel(){
 function updateExtraFields(){
     try{
         doing_modifications=true;
+      
+        $j('span.jira-issue-status-lozenge').each(function(index) {
+            if ($j(this).text() == 'Suspended' || $j(this).text() == 'Waiting For' || $j(this).text() == 'Need More Info' )
+                $j(this).css({'background':'red','color':'white'});
+        });
+      
         if ((add_extra_fields)) {
             
               $j('.ghx-plan-extra-fields').each(function (index) {
