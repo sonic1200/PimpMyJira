@@ -32,7 +32,7 @@ Click the Tampermonkey logo and select dashboard
 
 Now click on the + on left tab of Intalled Scripts
 
-Copy/ Paste your script then save [here](https://stash-tgo.ubisoft.org/projects/TOOL/repos/pimpmyjira/browse/PimpMyJira.js)
+Copy/ Paste your script then save [here](https://raw.githubusercontent.com/sonic1200/PimpMyJira/master/PimpMyJira.js)
 You should now have “Pimp My JIRA”
 
 Go back to your JIRA page and refresh it, the components will appear as we want 
