@@ -13,7 +13,7 @@ Feel free to contribute by sending PRs or forking it :-)
 
 Please folow the Install Guide which is available here : ['install'](https://github.com/sonic1200/PimpMyJira/blob/master/INSTALL.md)
 
-<a href="https://raw.githubusercontent.com/sonic1200/PimpMyJira/master/PimpMyJira.js">Click to install script X</a>
+<a href="https://raw.githubusercontent.com/sonic1200/PimpMyJira/master/PimpMyJira.js">Click to install script PimpMyJira</a>
 <small>(A userscript engine, like Tampermonkey, is required.)</small>
 
 # Usage
