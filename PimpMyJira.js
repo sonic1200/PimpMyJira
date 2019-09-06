@@ -67,6 +67,7 @@ var statuses = { 'Reopened': blue,
 var doing_modifications=false;
 
 // initiatilize my specific jQuery and avoid conflicts with Jira one
+/* globals jQuery: false */
 var $j = jQuery.noConflict(true);
 
 var matched,j_browser;
@@ -105,8 +106,9 @@ $j(document).ready(function () {
   var timer=0;
   //updateToolbar();
   $j( "body" ).bind("DOMSubtreeModified", function(){
-    if (timer)
-      window.clearTimeout(timer);
+    if (timer) {
+      window.clearTimeout(timer)
+    }
     if(! doing_modifications) {
         timer = window.setTimeout(function() {
             updateExtraFields();
@@ -141,7 +143,7 @@ function installMissedSplitbar() {
     tmpElem.innerHTML = '<span style="display: block;" id="js-sizer" class="ghx-sizer ui-resizable-handle ui-resizable-w" data-tooltip="Resize Detail View" original-title=""><span class="ghx-icon ghx-icon-sizer"></span></span>';
 
     var dragElem = tmpElem.childNodes[0];
-    if (controlGroup != null)  {
+    if (controlGroup != null) {
         controlGroup.insertBefore(dragElem, controlGroup.childNodes[0]);
         var currentWidth = localStorage.getItem('jiraWidth') || '400px';
         currentStylesheet = document.createElement('style');
@@ -205,12 +207,13 @@ function updateExtraFields(){
         doing_modifications=true;
 
         $j('span.jira-issue-status-lozenge').each(function(index) {
-            if ($j(this).text() == 'Suspended' || $j(this).text() == 'Waiting For' || $j(this).text() == 'Need More Info' )
-                $j(this).css({'background':'red','color':'white'});
+            if ($j(this).text() == 'Suspended' || $j(this).text() == 'Waiting For' || $j(this).text() == 'Need More Info' ) {
+                $j(this).css({'background':'red','color':'white'})
+            }
         });
 
         if ((add_extra_fields)) {
-            
+
               $j('.ghx-plan-extra-fields').each(function (index) {
                 if ($j(this).find('span.ghx-end.ghx-extra-field-estimate').length) {
                     $j(this).find('.ghx-extra-field').prependTo($j(this).find('span.ghx-end.ghx-extra-field-estimate'));
@@ -220,9 +223,9 @@ function updateExtraFields(){
                      $j(this).find('.ghx-extra-field').prependTo($j(this).prev());
                 }
             });
-            
+
             $j('.ghx-issue-content').each(function (index) {
-                
+
                if (( ! $j(this).find('.ghx-extra-field-content').hasClass('aui-label ghx-label ghx-label-10')) && ( ! $j(this).find('.ghx-extra-field-content').hasClass('aui-lozenge') )) {
                     $j(this).find('.ghx-extra-field').each(function() {
 
@@ -273,9 +276,9 @@ function updateExtraFields(){
 
                     });
                 }
-                
+
             });
-                
+
             $j('.ghx-extra-field-seperator').remove();
             $j('.ghx-issue-compact .ghx-row').css('height', 'auto');
             $j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('background', '#add');
