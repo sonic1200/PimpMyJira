@@ -2,13 +2,13 @@
 // @name        Pimp My Jira!
 // @description Enhances RapidBoard in Jira
 // @author       Nicolas Mivielle
-// @copyright    2018+, Nicolas Mivielle
+// @copyright    2020+, Nicolas Mivielle
 // @include     https://*/secure/RapidBoard.jspa*
 // @include     https://*/jira/browse*
 // @match        https://*/secure/RapidBoard.jspa*
 // @match        https://*/jira/browse*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version     3.2
+// @version     3.3
 // @grant       none
 // ==/UserScript==
 
@@ -67,7 +67,6 @@ var statuses = { 'Reopened': blue,
 var doing_modifications=false;
 
 // initiatilize my specific jQuery and avoid conflicts with Jira one
-/* globals jQuery: false */
 var $j = jQuery.noConflict(true);
 
 var matched,j_browser;
@@ -106,14 +105,13 @@ $j(document).ready(function () {
   var timer=0;
   //updateToolbar();
   $j( "body" ).bind("DOMSubtreeModified", function(){
-    if (timer) {
-      window.clearTimeout(timer)
-    }
+    if (timer)
+      window.clearTimeout(timer);
     if(! doing_modifications) {
         timer = window.setTimeout(function() {
             updateExtraFields();
             if (update_action_toolbar) {
-                updateToolbar();
+                updateToolbarforJira7();
             }
         }, 100);
     }
@@ -143,7 +141,7 @@ function installMissedSplitbar() {
     tmpElem.innerHTML = '<span style="display: block;" id="js-sizer" class="ghx-sizer ui-resizable-handle ui-resizable-w" data-tooltip="Resize Detail View" original-title=""><span class="ghx-icon ghx-icon-sizer"></span></span>';
 
     var dragElem = tmpElem.childNodes[0];
-    if (controlGroup != null) {
+    if (controlGroup != null)  {
         controlGroup.insertBefore(dragElem, controlGroup.childNodes[0]);
         var currentWidth = localStorage.getItem('jiraWidth') || '400px';
         currentStylesheet = document.createElement('style');
@@ -181,23 +179,75 @@ function endJiraDrag() {
         document.removeEventListener("mouseup", endJiraDrag, false);
     }
 
-function updateToolbar() {
+function updateToolbarforJira7() {
+    if ($j('div#opsbar-opsbar-transitions').length) {
+         if ($j('a#opsbar-transitions_more').length) {
+             var bgcolor="";
+             $j('.dropdown-text').each(function (index) {
+                 if ($j(this).text().indexOf("Workflow") >= 0) {
+                     $j('aui-dropdown-menu#opsbar-transitions_more_drop').find('.issueaction-workflow-transition').each(function (index2) {
+                         //console.log($j(this).text()); //--DEBUG
+                         //console.log($j(this).children().attr('href')); //-- DEBUG
+                         //console.log($j(this).attr('id')); //-- DEBUG
+                         $j('div#opsbar-opsbar-transitions').append("<a id=" + $j(this).attr('id') + " class='aui-button toolbar-trigger issueaction-workflow-transition' href=" + $j(this).children().attr('href') + " resolved><span class='trigger-label'>" + $j(this).text() + "</span></a>");
+                     });
+                     $j(this).parent().remove();
 
-    if ($j('ul#opsbar-opsbar-transitions').length) {
+                     $j('.issueaction-workflow-transition').each(function (index2) {
+                         switch ($j(this).text()) {
+                            case 'None' :
+                                bgcolor="#FFD1D7"
+                                break;
+                            case 'Reopened' :
+                                bgcolor="#93C9FF"
+                                break;
+                            case 'Open' :
+                                bgcolor="#93C9FF"
+                                break;
+                            case 'Resolve' :
+                                bgcolor="#C1FFC4"
+                                break;
+                            case 'Rejected' :
+                                bgcolor="#C1FFC4"
+                                break;
+                            case 'Closed' :
+                                bgcolor="#20DB46"
+                                break;
+                             case 'Waiting For' :
+                                bgcolor="#FFD1D7"
+                                break;
+                            default :
+                                bgcolor="#FFD351"
+                                break;
+                         }
+                         $j(this).css({'background': bgcolor });
+                     });
+                 }
 
-        $j('.toolbar-item').each(function (index) {
+             });
+         }
+    }
+}
+
+function updateToolbarForJira6() {
+
+    if ($j('div#opsbar-opsbar-transitions').length) {
+        if ($j('a#opsbar-transitions_more').length) {
+        //$j('.toolbar-item').each(function (index) {
+            $j('.dropdown-text').each(function (index) {
             if ($j(this).text().indexOf("Workflow") >= 0) {
-                $j(this).find('li.aui-list-item').each(function (index2) {
-                    //alert($j(this).text()); --DEBUG
-                    //alert($j(this).children().attr('href')); -- DEBUG
+                //$j(this).find('li.aui-list-item').each(function (index2) {
+                  $j('aui-dropdown-menu#opsbar-transitions_more_drop').each(function (index2) {
+                    //alert($j(this).text()); //--DEBUG
+                    //alert($j(this).children().attr('href')); //-- DEBUG
                     //style='color:DarkBlue'
-                    $j('ul#opsbar-opsbar-transitions').append("<li class='toolbar-item'><a id=" + $j(this).children().attr('id') + "' class='toolbar-trigger issueaction-workflow-transition' href=" + $j(this).children().attr('href') + "><span class='trigger-label'>" + $j(this).text() + "</span></a></li>");
+                    //$j('ul#opsbar-opsbar-transitions').append("<li class='toolbar-item'><a id=" + $j(this).children().attr('id') + "' class='toolbar-trigger issueaction-workflow-transition' href=" + $j(this).children().attr('href') + "><span class='trigger-label'>" + $j(this).text() + "</span></a></li>");
                       });
-               $j(this).remove();
+               //$j(this).remove();
           }
 
          });
-
+}
       }
 
     }
@@ -207,13 +257,12 @@ function updateExtraFields(){
         doing_modifications=true;
 
         $j('span.jira-issue-status-lozenge').each(function(index) {
-            if ($j(this).text() == 'Suspended' || $j(this).text() == 'Waiting For' || $j(this).text() == 'Need More Info' ) {
-                $j(this).css({'background':'red','color':'white'})
-            }
+            if ($j(this).text() == 'Suspended' || $j(this).text() == 'Waiting For' || $j(this).text() == 'Need More Info' )
+                $j(this).css({'background':'red','color':'white'});
         });
 
         if ((add_extra_fields)) {
-
+            
               $j('.ghx-plan-extra-fields').each(function (index) {
                 if ($j(this).find('span.ghx-end.ghx-extra-field-estimate').length) {
                     $j(this).find('.ghx-extra-field').prependTo($j(this).find('span.ghx-end.ghx-extra-field-estimate'));
@@ -223,9 +272,9 @@ function updateExtraFields(){
                      $j(this).find('.ghx-extra-field').prependTo($j(this).prev());
                 }
             });
-
+            
             $j('.ghx-issue-content').each(function (index) {
-
+                
                if (( ! $j(this).find('.ghx-extra-field-content').hasClass('aui-label ghx-label ghx-label-10')) && ( ! $j(this).find('.ghx-extra-field-content').hasClass('aui-lozenge') )) {
                     $j(this).find('.ghx-extra-field').each(function() {
 
@@ -273,17 +322,19 @@ function updateExtraFields(){
                                 $j(this).find('.ghx-extra-field-content').toggleClass("aui-label ghx-label ghx-label-10");
                                 break;
                         }
+                        $j(this).find('.ghx-extra-field-content').css('margin-right','5px');
 
                     });
                 }
-
+                
             });
-
+                
             $j('.ghx-extra-field-seperator').remove();
             $j('.ghx-issue-compact .ghx-row').css('height', 'auto');
-            $j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('background', '#add');
-            $j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('color', '#000000');
-            $j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('margin-left', '5px');
+            $j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css({"background-color": "#fff", "border-color" : "#c1c7d0", "color" : "#42526e", "border ": "1px solid #dfe1e6", "border-radius" : "3px", "font-weight" : "bold", "padding" : "1px 2px"});
+            //$j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('background', '#add');
+            //$j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('color', '#000000');
+            //$j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('margin-left', '5px');
 
             //Kanban WIP add more warnings...
             $j('.ghx-column-headers .ghx-column.ghx-busted-max').css({"color" : "#FFFFFF","font-weight" : "bold","background" : "#d04437", "border-bottom-color" : "#d04437", "padding-left" : "10px"});
