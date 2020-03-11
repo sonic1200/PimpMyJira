@@ -33,6 +33,8 @@ Please folow the Install Guide which is available here : ['install'](https://git
 ![Backlog Board](https://github.com/sonic1200/PimpMyJira/raw/master/screen2.png)
 
 # Versions
+- **Version 3.3** : Add new feature to expand all the possible workflow action (transitions) from the current status in the issue Jira page. You can add background color to that action buttons to add action categorization (like lozenge color code into Jira).
+
 - **Version 3.0** : New code architecture and refactoring for better DOM change detection that only trigger when needed. This should use less CPU and need less refresh on the page (rewrite page only when needed).
 					New feature with extra fields configuration : From now, if you choose to add statuses as an extra field in your board configuration, all common JIRA statuses are automatically detected and properly labelled moreover all common blocking statuses are colored in RED. Statuses list will be configurable in a future version.
                     Here is the list of the current supported statuses : Reopened, Open, In Progress, Need More Info (flagged in red), In Review, Waiting For (flagged in red), Suspended (flagged in red), Work Completed, Resolved, Closed, Rejected. If you need to add specific statuses, please ask for an update (see capture below).
@@ -70,10 +72,13 @@ PimpMyJira! support the following features :
 - Flagged issues will stay in Yellow. Issue color will not override the flag color.
 - Most common Statuses added as extra field are now automaticaly detected and formatted like JIRA status lozenge. Blocking statuses are put in red for better visibility ('Need More Info',  'Waiting For' and 'Suspended').
 - Kanban boards are optimized to have a better visibility on columns that have their limits busted (max or min). The header of the columns are now colored in red or yellow depending of the limit. Titles are also tweaked to get better warning informations.
+- Remove the 'Workflow' dropdown button and expand all the possible workflows steps from the current status directly in the operation toolbar as separate buttons. Bonus : you can add background button color to differentiate action workflow.
 - You can activate or deactivate all features by using the configuration section in the UserScript.
  - colorize_issue = true : Activate the card colorization in JIRA boards.
  - remove_type_icon = true : Remove the issue type icon on each JIRA cards.
- - add_extra_fields= true : Add configured extra-fields (like labels, components,…) directly near the EPIC in each JIRan card.
+ - add_extra_fields = true : Add configured extra-fields (like labels, components,…) directly near the EPIC in each JIRan card.
+ - update_action_toolbar = true : Activate the expansion of unique action workflow button in toolbar and remove the 'More Workflows' button.
+ - colorize_action_toolbar = true : If 'update_action_toolbar' is used, will activate the background color for each workflow action button. (not really configurable yet)
 
 
 # Future

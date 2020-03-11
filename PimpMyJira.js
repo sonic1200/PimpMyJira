@@ -29,6 +29,9 @@ var add_extra_fields=true;
 //This will update the jira card action toolbar to expand all workflows under the 'workflow' button with REAL buttons!
 var update_action_toolbar=true;
 
+//This will add background colors to the new action buttons expanded when the parameter above (update_action_toolbar) is activated.
+var colorize_action_toolbar=true;
+
 //CSS statuses colors
 var blue = ".jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-blue-gray jira-issue-status-lozenge-new aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium";
 var yellow = ".jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-yellow jira-issue-status-lozenge-indeterminate aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium";
@@ -119,7 +122,7 @@ $j(document).ready(function () {
 });
 
 
-//FUNCTION TO RESIZE RIGHT PANEL
+//FUNCTION TO RESIZE RIGHT PANEL -- NOT WORKING STILL IN PROGRESS
 window.addEventListener("load", installMissedSplitbar,false);
 
     var currentStylesheet;
@@ -180,70 +183,99 @@ function endJiraDrag() {
     }
 
 function updateToolbarforJira7() {
-    if ($j('div#opsbar-opsbar-transitions').length) {
+    // I check if I updated the CSS and if the transition toolbar is present
+    if ($j('div#opsbar-opsbar-transitions').length && $j('.issueaction-workflow-transition').css('background') == 'rgba(9, 30, 66, 0.08) none repeat scroll 0% 0% / auto padding-box border-box') {
+
+        // I check if I already tranformed the page and expanded the workflow dropdown
          if ($j('a#opsbar-transitions_more').length) {
-             var bgcolor="";
+             var bgcolor="#FFD1D7";
              $j('.dropdown-text').each(function (index) {
+                 // Findind all the Workflows available in the dropdown
                  if ($j(this).text().indexOf("Workflow") >= 0) {
                      $j('aui-dropdown-menu#opsbar-transitions_more_drop').find('.issueaction-workflow-transition').each(function (index2) {
                          //console.log($j(this).text()); //--DEBUG
                          //console.log($j(this).children().attr('href')); //-- DEBUG
                          //console.log($j(this).attr('id')); //-- DEBUG
+                         // Expanding the workflows dropdown by creating all buttons in the ops toolbar
                          $j('div#opsbar-opsbar-transitions').append("<a id=" + $j(this).attr('id') + " class='aui-button toolbar-trigger issueaction-workflow-transition' href=" + $j(this).children().attr('href') + " resolved><span class='trigger-label'>" + $j(this).text() + "</span></a>");
                      });
+                     // removing the dropdown workflow
                      $j(this).parent().remove();
-
-                     $j('.issueaction-workflow-transition').each(function (index2) {
-                         switch ($j(this).text()) {
-                            case 'None' :
-                                bgcolor="#FFD1D7"
-                                break;
-                            case 'Reopened' :
-                                bgcolor="#93C9FF"
-                                break;
-                            case 'Open' :
-                                bgcolor="#93C9FF"
-                                break;
-                            case 'Resolve' :
-                                bgcolor="#C1FFC4"
-                                break;
-                            case 'Rejected' :
-                                bgcolor="#C1FFC4"
-                                break;
-                            case 'Closed' :
-                                bgcolor="#20DB46"
-                                break;
-                             case 'Waiting For' :
-                                bgcolor="#FFD1D7"
-                                break;
-                            default :
-                                bgcolor="#FFD351"
-                                break;
-                         }
-                         $j(this).css({'background': bgcolor });
-                     });
                  }
 
              });
+         }
+        if (colorize_action_toolbar) {
+            // Findind all buttons about transition workflows and applying colors background to them
+            $j('.issueaction-workflow-transition').each(function (index2) {
+                switch ($j(this).text().toLowerCase()) {
+                    case 'none' :
+                        bgcolor="#FFD1D7"
+                        break;
+                    case 'reopened' :
+                        bgcolor="#93C9FF"
+                        break;
+                    case 'reopen' :
+                        bgcolor="#93C9FF"
+                        break;
+                    case 'open' :
+                        bgcolor="#93C9FF"
+                        break;
+                    case 'need approval' :
+                        bgcolor="#93C9FF"
+                        break;
+                    case 'resolve' :
+                        bgcolor="#C1FFC4"
+                        break;
+                    case 'test success' :
+                        bgcolor="#C1FFC4"
+                        break;
+                    case 'rejected' :
+                        bgcolor="#ADADAD"
+                        break;
+                    case 'closed' :
+                        bgcolor="#C1FFC4"
+                        break;
+                    case 'close - cannot reproduce' :
+                        bgcolor="#C1FFC4"
+                        break;
+                    case 'close - duplicate' :
+                        bgcolor="#C1FFC4"
+                        break;
+                    case 'close - not a defect' :
+                        bgcolor="#C1FFC4"
+                        break;
+                    case 'close - will not fix' :
+                        bgcolor="#C1FFC4"
+                        break;
+                    case 'waiting for' :
+                        bgcolor="#FFD1D7"
+                        break;
+                    case 'test fail' :
+                        bgcolor="#FFD1D7"
+                        break;
+                    default :
+                        bgcolor="#FFD351"
+                        break;
+                }
+                $j(this).css({'background': bgcolor });
+            });
          }
     }
 }
 
 function updateToolbarForJira6() {
-
     if ($j('div#opsbar-opsbar-transitions').length) {
         if ($j('a#opsbar-transitions_more').length) {
-        //$j('.toolbar-item').each(function (index) {
-            $j('.dropdown-text').each(function (index) {
+        $j('.toolbar-item').each(function (index) {
             if ($j(this).text().indexOf("Workflow") >= 0) {
-                //$j(this).find('li.aui-list-item').each(function (index2) {
-                  $j('aui-dropdown-menu#opsbar-transitions_more_drop').each(function (index2) {
+                $j(this).find('li.aui-list-item').each(function (index2) {
                     //alert($j(this).text()); //--DEBUG
                     //alert($j(this).children().attr('href')); //-- DEBUG
                     //style='color:DarkBlue'
-                    //$j('ul#opsbar-opsbar-transitions').append("<li class='toolbar-item'><a id=" + $j(this).children().attr('id') + "' class='toolbar-trigger issueaction-workflow-transition' href=" + $j(this).children().attr('href') + "><span class='trigger-label'>" + $j(this).text() + "</span></a></li>");
+                    $j('ul#opsbar-opsbar-transitions').append("<li class='toolbar-item'><a id=" + $j(this).children().attr('id') + "' class='toolbar-trigger issueaction-workflow-transition' href=" + $j(this).children().attr('href') + "><span class='trigger-label'>" + $j(this).text() + "</span></a></li>");
                       });
-               //$j(this).remove();
+               $j(this).remove();
           }
 
          });
