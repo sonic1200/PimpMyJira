@@ -227,6 +227,9 @@ function updateToolbarforJira7() {
                     case 'resolve' :
                         bgcolor="#C1FFC4"
                         break;
+                    case 'resolved' :
+                        bgcolor="#C1FFC4"
+                        break;
                     case 'test success' :
                         bgcolor="#C1FFC4"
                         break;
@@ -234,6 +237,9 @@ function updateToolbarforJira7() {
                         bgcolor="#ADADAD"
                         break;
                     case 'closed' :
+                        bgcolor="#C1FFC4"
+                        break;
+                    case 'close' :
                         bgcolor="#C1FFC4"
                         break;
                     case 'close - cannot reproduce' :
@@ -249,6 +255,12 @@ function updateToolbarforJira7() {
                         bgcolor="#C1FFC4"
                         break;
                     case 'waiting for' :
+                        bgcolor="#FFD1D7"
+                        break;
+                    case 'need more info' :
+                        bgcolor="#FFD1D7"
+                        break;
+                    case 'blocked' :
                         bgcolor="#FFD1D7"
                         break;
                     case 'test fail' :
