@@ -2,13 +2,15 @@
 // @name        Pimp My Jira!
 // @description Enhances RapidBoard in Jira
 // @author       Nicolas Mivielle
-// @copyright    2020+, Nicolas Mivielle
+// @copyright    2021+, Nicolas Mivielle
 // @include     https://*/secure/RapidBoard.jspa*
 // @include     https://*/jira/browse*
+// @include     https://*/jira/projects*
 // @match        https://*/secure/RapidBoard.jspa*
 // @match        https://*/jira/browse*
+// @match        https://*/jira/projects*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version     3.3
+// @version     3.9
 // @grant       none
 // ==/UserScript==
 
@@ -31,6 +33,9 @@ var update_action_toolbar=true;
 
 //This will add background colors to the new action buttons expanded when the parameter above (update_action_toolbar) is activated.
 var colorize_action_toolbar=true;
+
+//Remove Ubi Left Toolbar which is automatically added for every pages when browsing Jira. This can cause some erratic bahavior with certain plugins (like roadmap or timeline)
+var removeUbiToolbar=true;
 
 //CSS statuses colors
 var blue = ".jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-blue-gray jira-issue-status-lozenge-new aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium";
@@ -57,6 +62,7 @@ var statuses = { 'Reopened': blue,
                 'Resolved' : green,
                 'Could Not Verified' : green,
                 'Closed' : green,
+                'Verified' : green,
                 'Rejected' : green
                };
 
@@ -68,6 +74,10 @@ var statuses = { 'Reopened': blue,
 
 // initialize modification flag :
 var doing_modifications=false;
+
+// init Jira Version :
+var JIRAversion = returnJiraVersion();
+console.log("***DEBUG =" + JIRAversion);
 
 // initiatilize my specific jQuery and avoid conflicts with Jira one
 var $j = jQuery.noConflict(true);
@@ -106,13 +116,13 @@ $j.browser = j_browser;
 
 $j(document).ready(function () {
   var timer=0;
-  //updateToolbar();
+  //updateToolbarForJira6();
   $j( "body" ).bind("DOMSubtreeModified", function(){
     if (timer)
       window.clearTimeout(timer);
     if(! doing_modifications) {
         timer = window.setTimeout(function() {
-            updateExtraFields();
+                UpdateDOMPage();
             if (update_action_toolbar) {
                 updateToolbarforJira7();
             }
@@ -182,6 +192,15 @@ function endJiraDrag() {
         document.removeEventListener("mouseup", endJiraDrag, false);
     }
 
+
+function returnJiraVersion() {
+    JIRAversion = AJS.$('meta[name=ajs-version-number]').attr('content');
+    var res = JIRAversion.slice(0, 1);
+    console.log("JIRA VERSION = " + JIRAversion);
+    console.log("JIRA FAMILLY = " + res);
+    return res;
+}
+
 function updateToolbarforJira7() {
     // I check if I updated the CSS and if the transition toolbar is present
     if ($j('div#opsbar-opsbar-transitions').length && $j('.issueaction-workflow-transition').css('background') == 'rgba(9, 30, 66, 0.08) none repeat scroll 0% 0% / auto padding-box border-box') {
@@ -239,6 +258,9 @@ function updateToolbarforJira7() {
                     case 'closed' :
                         bgcolor="#C1FFC4"
                         break;
+                    case 'issue closed' :
+                        bgcolor="#C1FFC4"
+                        break;
                     case 'close' :
                         bgcolor="#C1FFC4"
                         break;
@@ -282,9 +304,6 @@ function updateToolbarForJira6() {
         $j('.toolbar-item').each(function (index) {
             if ($j(this).text().indexOf("Workflow") >= 0) {
                 $j(this).find('li.aui-list-item').each(function (index2) {
-                    //alert($j(this).text()); //--DEBUG
-                    //alert($j(this).children().attr('href')); //-- DEBUG
-                    //style='color:DarkBlue'
                     $j('ul#opsbar-opsbar-transitions').append("<li class='toolbar-item'><a id=" + $j(this).children().attr('id') + "' class='toolbar-trigger issueaction-workflow-transition' href=" + $j(this).children().attr('href') + "><span class='trigger-label'>" + $j(this).text() + "</span></a></li>");
                       });
                $j(this).remove();
@@ -296,18 +315,25 @@ function updateToolbarForJira6() {
 
     }
 
-function updateExtraFields(){
-    try{
-        doing_modifications=true;
+function updateExtraFieldsJira8(){
 
-        $j('span.jira-issue-status-lozenge').each(function(index) {
-            if ($j(this).text() == 'Suspended' || $j(this).text() == 'Waiting For' || $j(this).text() == 'Need More Info' )
-                $j(this).css({'background':'red','color':'white'});
-        });
+              $j('.ghx-issue-content').each(function (index) {
+                if ($j(this).find('.ghx-extra-field').length) {
+                    if ($j(this).find('span.ghx-end.ghx-estimate').length) {
+                        $j(this).find('.ghx-extra-field').prependTo($j(this).find('span.ghx-end.ghx-estimate'));
+                        $j(this).find('span.ghx-end.ghx-extra-field-estimate').unwrap();
+                    }
+                    else {
+                         $j(this).find('.ghx-extra-field').prependTo($j(this).prev());
+                    }
+                         $j(this).find($j('.ghx-plan-extra-fields.ghx-plan-extra-fields-2.ghx-row')).remove();
+                 }
+            });
+ }
 
-        if ((add_extra_fields)) {
-            
-              $j('.ghx-plan-extra-fields').each(function (index) {
+function updateExtraFieldsJira7(){
+
+         $j('.ghx-plan-extra-fields').each(function (index) {
                 if ($j(this).find('span.ghx-end.ghx-extra-field-estimate').length) {
                     $j(this).find('.ghx-extra-field').prependTo($j(this).find('span.ghx-end.ghx-extra-field-estimate'));
                     $j(this).find('span.ghx-end.ghx-extra-field-estimate').unwrap();
@@ -316,9 +342,40 @@ function updateExtraFields(){
                      $j(this).find('.ghx-extra-field').prependTo($j(this).prev());
                 }
             });
-            
+ }
+
+
+function UpdateDOMPage(){
+    try{
+        doing_modifications=true;
+
+        if ((removeUbiToolbar)) {
+        $j("#dw-sm-verticalManaBarContainer").remove();
+        $j("#dw-sm-loadingOverlay ").remove();
+        $j('body').attr('style', 'padding-left: 0px !important');
+        //console.log($j("body").css('padding-left'));
+        }
+
+
+        $j('span.jira-issue-status-lozenge').each(function(index) {
+            if ($j(this).text() == 'Suspended' || $j(this).text() == 'Waiting For' || $j(this).text() == 'Need More Info' )
+                $j(this).css({'background':'red','color':'white'});
+        });
+
+        if ((add_extra_fields)) {
+            switch (JIRAversion) {
+                case '7' :
+                    updateExtraFieldsJira7()
+                    break;
+                 case '8' :
+                    updateExtraFieldsJira8()
+                    break;
+                 default :
+                    console.log("ERROR WHILE DETECTING JIRA VERSION = " + JIRAversion);
+                    }
+
             $j('.ghx-issue-content').each(function (index) {
-                
+
                if (( ! $j(this).find('.ghx-extra-field-content').hasClass('aui-label ghx-label ghx-label-10')) && ( ! $j(this).find('.ghx-extra-field-content').hasClass('aui-lozenge') )) {
                     $j(this).find('.ghx-extra-field').each(function() {
 
@@ -358,6 +415,7 @@ function updateExtraFields(){
                             case 'Closed':
                             case 'Done':
                             case 'Resolved' :
+                            case 'Verified' :
                             case 'Could Not Verified' :
                             case 'Rejected':
                                 $j(this).find('.ghx-extra-field-content').toggleClass(".jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium");
@@ -370,9 +428,9 @@ function updateExtraFields(){
 
                     });
                 }
-                
+
             });
-                
+
             $j('.ghx-extra-field-seperator').remove();
             $j('.ghx-issue-compact .ghx-row').css('height', 'auto');
             $j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css({"background-color": "#fff", "border-color" : "#c1c7d0", "color" : "#42526e", "border ": "1px solid #dfe1e6", "border-radius" : "3px", "font-weight" : "bold", "padding" : "1px 2px"});
