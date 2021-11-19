@@ -10,7 +10,7 @@
 // @match        https://*/jira/browse*
 // @match        https://*/jira/projects*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version     3.9
+// @version     4.0
 // @grant       none
 // ==/UserScript==
 
@@ -36,6 +36,12 @@ var colorize_action_toolbar=true;
 
 //Remove Ubi Left Toolbar which is automatically added for every pages when browsing Jira. This can cause some erratic bahavior with certain plugins (like roadmap or timeline)
 var removeUbiToolbar=true;
+
+//This will add background color to the Epic panel that follow the color set for the Epic. (it extend the color from the border right) available only on JIRA 8.
+var colorize_epic_panel=true;
+
+//This will reduce height size of each row in backlog
+var reduce_height = true;
 
 //CSS statuses colors
 var blue = ".jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-blue-gray jira-issue-status-lozenge-new aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium";
@@ -77,7 +83,6 @@ var doing_modifications=false;
 
 // init Jira Version :
 var JIRAversion = returnJiraVersion();
-console.log("***DEBUG =" + JIRAversion);
 
 // initiatilize my specific jQuery and avoid conflicts with Jira one
 var $j = jQuery.noConflict(true);
@@ -130,67 +135,6 @@ $j(document).ready(function () {
     }
     });
 });
-
-
-//FUNCTION TO RESIZE RIGHT PANEL -- NOT WORKING STILL IN PROGRESS
-window.addEventListener("load", installMissedSplitbar,false);
-
-    var currentStylesheet;
-    var stateMouseDown = false;
-    var mouseStartX = 0;
-    var jiraStartWidth, jiraHeaderWidth;
-    var dragBar = document.getElementById("ghx-detail-head");
-    var detailView = document.getElementById("ghx-detail-view");
-    var headerGroup = document.getElementById("ghx-column-header-group");
-    var controlGroup = document.getElementById("ghx-detail-head");
-    var tmpElem = document.createElement('div');
-
-function installMissedSplitbar() {
-    dragBar = document.getElementById("ghx-detail-head");
-    detailView = document.getElementById("ghx-detail-view");
-    headerGroup = document.getElementById("ghx-column-header-group");
-    controlGroup = document.getElementById("ghx-detail-head");
-
-    tmpElem.innerHTML = '<span style="display: block;" id="js-sizer" class="ghx-sizer ui-resizable-handle ui-resizable-w" data-tooltip="Resize Detail View" original-title=""><span class="ghx-icon ghx-icon-sizer"></span></span>';
-
-    var dragElem = tmpElem.childNodes[0];
-    if (controlGroup != null)  {
-        controlGroup.insertBefore(dragElem, controlGroup.childNodes[0]);
-        var currentWidth = localStorage.getItem('jiraWidth') || '400px';
-        currentStylesheet = document.createElement('style');
-        currentStylesheet.innerHTML = '#ghx-detail-view { width: ' + currentWidth + ' !important;}';
-        document.body.insertBefore(currentStylesheet, document.body.childNodes[0]);
-        dragBar.addEventListener("mousedown", startJiraDrag, false);
-        }
-}
-
-
-function startJiraDrag(ev) {
-        if (currentStylesheet) {
-            document.body.removeChild(currentStylesheet);
-        }
-        stateMouseDown = true;
-        mouseStartX = ev.pageX;
-        jiraStartWidth = detailView.clientWidth;
-        jiraHeaderWidth = headerGroup.clientWidth;
-        document.addEventListener("mousemove", continueJiraDrag, false);
-        document.addEventListener("mouseup", endJiraDrag, false);
-    }
-
-function continueJiraDrag(ev) {
-        var pX = ev.pageX;
-        detailView.style.width = (jiraStartWidth + mouseStartX - pX) + "px";
-        headerGroup.style.width = (jiraHeaderWidth - mouseStartX + pX) + "px";
-    }
-
-function endJiraDrag() {
-        currentStylesheet = document.createElement('style');
-        currentStylesheet.innerHTML = '#ghx-detail-view { width: ' + detailView.style.width + ' !important;}';
-        document.body.insertBefore(currentStylesheet, document.body.childNodes[0]);
-        localStorage.setItem('jiraWidth', detailView.style.width);
-        document.removeEventListener("mousemove", continueJiraDrag, false);
-        document.removeEventListener("mouseup", endJiraDrag, false);
-    }
 
 
 function returnJiraVersion() {
@@ -316,23 +260,29 @@ function updateToolbarForJira6() {
     }
 
 function updateExtraFieldsJira8(){
-
               $j('.ghx-issue-content').each(function (index) {
-                if ($j(this).find('.ghx-extra-field').length) {
-                    if ($j(this).find('span.ghx-end.ghx-estimate').length) {
-                        $j(this).find('.ghx-extra-field').prependTo($j(this).find('span.ghx-end.ghx-estimate'));
-                        $j(this).find('span.ghx-end.ghx-extra-field-estimate').unwrap();
-                    }
-                    else {
-                         $j(this).find('.ghx-extra-field').prependTo($j(this).prev());
-                    }
-                         $j(this).find($j('.ghx-plan-extra-fields.ghx-plan-extra-fields-2.ghx-row')).remove();
-                 }
+                  if ($j(this).find('div.ghx-plan-extra-fields.ghx-plan-extra-fields-2.ghx-row').length) {
+                      $j(this).find('div.ghx-plan-extra-fields.ghx-plan-extra-fields-2.ghx-row').insertAfter($j(this).find('div.ghx-summary'));
+                      }
             });
  }
 
-function updateExtraFieldsJira7(){
+function updateEpicColorsJira8(){
+         if (colorize_epic_panel) {
+              $j('div.ghx-inner').each(function (index) {
+                var epic_string = $j(this).parent().css("border-right");
+                var epic_color = epic_string.substring(epic_string.lastIndexOf( "rgb" ), epic_string.length );
+                  if(epic_color.indexOf('a') == -1){
+                    var colorstart = epic_color.replace(')', ', 0)').replace('rgb', 'rgba');
+                    var colorstop = epic_color.replace(')', ', 1)').replace('rgb', 'rgba');
+                    // compute gradient and set to the current object
+                    $j(this).css({ "background": "linear-gradient(to right, " + colorstart + " 50%, " + colorstop + ")"});
+                   }
+            });
+          }
+ }
 
+function updateExtraFieldsJira7(){
          $j('.ghx-plan-extra-fields').each(function (index) {
                 if ($j(this).find('span.ghx-end.ghx-extra-field-estimate').length) {
                     $j(this).find('.ghx-extra-field').prependTo($j(this).find('span.ghx-end.ghx-extra-field-estimate'));
@@ -369,6 +319,10 @@ function UpdateDOMPage(){
                     break;
                  case '8' :
                     updateExtraFieldsJira8()
+                    updateEpicColorsJira8()
+                    if (reduce_height){
+                        $j('div.ghx-row').css({"margin" : "2px"});
+                        }
                     break;
                  default :
                     console.log("ERROR WHILE DETECTING JIRA VERSION = " + JIRAversion);
@@ -434,9 +388,6 @@ function UpdateDOMPage(){
             $j('.ghx-extra-field-seperator').remove();
             $j('.ghx-issue-compact .ghx-row').css('height', 'auto');
             $j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css({"background-color": "#fff", "border-color" : "#c1c7d0", "color" : "#42526e", "border ": "1px solid #dfe1e6", "border-radius" : "3px", "font-weight" : "bold", "padding" : "1px 2px"});
-            //$j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('background', '#add');
-            //$j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('color', '#000000');
-            //$j('span.ghx-extra-field-content.aui-label.ghx-label.ghx-label-10').css('margin-left', '5px');
 
             //Kanban WIP add more warnings...
             $j('.ghx-column-headers .ghx-column.ghx-busted-max').css({"color" : "#FFFFFF","font-weight" : "bold","background" : "#d04437", "border-bottom-color" : "#d04437", "padding-left" : "10px"});
