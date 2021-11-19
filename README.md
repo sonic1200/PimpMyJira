@@ -33,6 +33,7 @@ Please folow the Install Guide which is available here : ['install'](https://git
 ![Backlog Board](https://github.com/sonic1200/PimpMyJira/raw/master/screen2.png)
 
 # Versions
+- **Version 4.0** : Stable support for JIRA 8. Extra field placement is now correctly set. Still a known issue with colors not updated correctly (missing refresh event will be added in a future update). Add NEW feature to add color on the Epics button in the Epic panel in backlog view (use the color set from the Epic panel). Reduced height of all lines in backlog view to add more lines on screen (can be switched to OFF in the configuration section of the script). Small cleanup of unused functions.
 - **Version 3.9** : Add preliminary support for JIRA 8. New function to detect Jira version and apply correct script branch. Repair broken extra fields on JIRA 8 - WORK IN PROGRESS - NEED MORE WORK but functionnal. **Known issue** : line colorization is not correctly updated in backlog and sprint view. Partial update. Need to rework this script section. Some code cleanup - Prepare for version 4.0 !
 		    
 - **Version 3.3** : Add new feature to expand all the possible workflow action (transitions) from the current status in the issue Jira page. You can add background color to that action buttons to add action categorization (like lozenge color code into Jira).
