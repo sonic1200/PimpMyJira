@@ -82,6 +82,8 @@ PimpMyJira! support the following features :
  - add_extra_fields = true : Add configured extra-fields (like labels, components,…) directly near the EPIC in each JIRan card.
  - update_action_toolbar = true : Activate the expansion of unique action workflow button in toolbar and remove the 'More Workflows' button.
  - colorize_action_toolbar = true : If 'update_action_toolbar' is used, will activate the background color for each workflow action button. (not really configurable yet)
+ - colorize_epic_panel = true : Activate the Epic panel colorization gradiant in Epic panel bar in backlog view - Only available for JIRA 8
+ - reduce_height = true : Minimize the space between all cards in backlog view to maximize the numer of lines that can be seen on a screen - Only available for JIRA 8
 
 
 # Future
