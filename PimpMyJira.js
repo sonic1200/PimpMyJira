@@ -10,7 +10,7 @@
 // @match        https://*/jira/browse*
 // @match        https://*/jira/projects*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version     4.0
+// @version     4.1
 // @grant       none
 // ==/UserScript==
 
@@ -136,7 +136,6 @@ $j(document).ready(function () {
     });
 });
 
-
 function returnJiraVersion() {
     JIRAversion = AJS.$('meta[name=ajs-version-number]').attr('content');
     var res = JIRAversion.slice(0, 1);
@@ -260,11 +259,12 @@ function updateToolbarForJira6() {
     }
 
 function updateExtraFieldsJira8(){
-              $j('.ghx-issue-content').each(function (index) {
-                  if ($j(this).find('div.ghx-plan-extra-fields.ghx-plan-extra-fields-2.ghx-row').length) {
-                      $j(this).find('div.ghx-plan-extra-fields.ghx-plan-extra-fields-2.ghx-row').insertAfter($j(this).find('div.ghx-summary'));
+               $j('.ghx-issue-content').each(function (index) {
+                  if ($j(this).find('div.ghx-row').next().length) {
+                      $j(this).find($("[class*='ghx-plan-extra-fields']")).insertAfter($j(this).find('div.ghx-summary'));
                       }
             });
+
  }
 
 function updateEpicColorsJira8(){
