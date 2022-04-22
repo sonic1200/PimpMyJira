@@ -3,14 +3,11 @@
 // @description Enhances RapidBoard in Jira
 // @author       Nicolas Mivielle
 // @copyright    2021+, Nicolas Mivielle
-// @include     https://*/secure/RapidBoard.jspa*
-// @include     https://*/jira/browse*
-// @include     https://*/jira/projects*
-// @match        https://*/secure/RapidBoard.jspa*
+// @match        https://*/jira/secure/RapidBoard.jspa*
 // @match        https://*/jira/browse*
 // @match        https://*/jira/projects*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version     4.1
+// @version     4.2
 // @grant       none
 // ==/UserScript==
 
