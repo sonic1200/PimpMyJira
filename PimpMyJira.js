@@ -21,7 +21,6 @@
     formatExtraFields: true,
     updateActionToolbar: true,
     colorizeActionToolbar: true,
-    removeUbiToolbar: true,
     colorizeEpicPanel: true,
     reduceHeight: true,
   };
@@ -240,18 +239,17 @@ function makeDraggable($el, onStop) {
     const container = $('#opsbar-opsbar-transitions'), dropdown = $('a#opsbar-transitions_more');
     if (!container.length || !dropdown.length || container.hasClass('pimped')) return;
     container.addClass('pimped');
-    container.find('.issueaction-workflow-transition').not('#opsbar-transitions_more').remove();
     $('aui-dropdown-menu#opsbar-transitions_more_drop .issueaction-workflow-transition')
       .each(function() {
         const id = $(this).attr('id'), href = $(this).children().attr('href'),
           label = $(this).text();
         container.append(`<a id="${id}" class="aui-button toolbar-trigger issueaction-workflow-transition" href="${href}"><span class="trigger-label">${label}</span></a>`);
       });
-    dropdown.closest('.toolbar-item').remove();
+    dropdown.closest('#opsbar-transitions_more').remove();
     if (CONFIG.colorizeActionToolbar) {
       $('.issueaction-workflow-transition').each(function() {
         const l = $(this).text().toLowerCase(), bg =
-          ["reopen","open","reopened","need approval"].includes(l) ? "#93C9FF" :
+          ["reopen","open","reopened","need approval","devtest request"].includes(l) ? "#93C9FF" :
           ["resolve","resolved","test success","closed","issue closed","close"].includes(l) ? "#C1FFC4" :
           ["waiting for","need more info","blocked","test fail"].includes(l) ? "#FFD1D7" :
           l === "rejected" ? "#ADADAD" : "#FFD351";
