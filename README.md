@@ -78,14 +78,15 @@ PimpMyJira! support the following features :
 - Most common Statuses added as extra field are now automaticaly detected and formatted like JIRA status lozenge. Blocking statuses are put in red for better visibility ('Need More Info',  'Waiting For' and 'Suspended').
 - Kanban boards are optimized to have a better visibility on columns that have their limits busted (max or min). The header of the columns are now colored in red or yellow depending of the limit. Titles are also tweaked to get better warning informations.
 - Remove the 'Workflow' dropdown button and expand all the possible workflows steps from the current status directly in the operation toolbar as separate buttons. Bonus : you can add background button color to differentiate action workflow.
-- You can activate or deactivate all features by using the configuration section in the UserScript.
- - colorize_issue = true : Activate the card colorization in JIRA boards.
- - remove_type_icon = true : Remove the issue type icon on each JIRA cards.
- - add_extra_fields = true : Add configured extra-fields (like labels, components,…) directly near the EPIC in each JIRan card.
- - update_action_toolbar = true : Activate the expansion of unique action workflow button in toolbar and remove the 'More Workflows' button.
- - colorize_action_toolbar = true : If 'update_action_toolbar' is used, will activate the background color for each workflow action button. (not really configurable yet)
- - colorize_epic_panel = true : Activate the Epic panel colorization gradiant in Epic panel bar in backlog view - Only available for JIRA 8
- - reduce_height = true : Minimize the space between all cards in backlog view to maximize the numer of lines that can be seen on a screen - Only available for JIRA 8
+- You can activate or deactivate all features by using the configuration section in the UserScript by default or use the new configuration panel on the Jira page. All configs will be stored in your browser cache.
+ - colorizeIssues = true : Activate the card colorization in JIRA boards.
+ - removeTypeIcon = true : Remove the issue type icon on each JIRA cards.
+ - addExtraFields = true : Add configured extra-fields (like labels, components,…) directly near the EPIC in each Jira card.
+ - formatExtraFields = true : Reformat the extrafield to add some 'button' style
+ - updateActionToolbar = true : Activate the expansion of unique action workflow button in toolbar and remove the 'More Workflows' button.
+ - colorizeActionToolbar = true : If 'update_action_toolbar' is used, will activate the background color for each workflow action button. (not really configurable yet)
+ - colorizeEpicPanel = true : Activate the Epic panel colorization gradiant in Epic panel bar in backlog view - Only available for JIRA 8
+ - reduceHeight = true : Minimize the space between all cards in backlog view to maximize the numer of lines that can be seen on a screen - Only available for JIRA 8
 
 
 # Future
