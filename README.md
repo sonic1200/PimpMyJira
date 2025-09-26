@@ -23,7 +23,7 @@ Please folow the Install Guide which is available here : ['install'](https://git
 - Go browsing on your JIRA instance.
 - For adding extra fields, on your Board Configuration, in the section ['Card Layout'](https://support.atlassian.com/jira-software-cloud/docs/customize-cards/), activate all the extra fields that you want.
 - For configuring Jira card colors, on your Board Configuration, change the colors for each type in the section ['Card colors'](https://support.atlassian.com/jira-software-cloud/docs/customize-cards/).
-- You can activate or deactivate PimpMyJira! features in the new configuration panel integrated on the Jira page.
+- You can activate or deactivate PimpMyJira! features in the new configuration panel integrated on the Jira page. You can drag&drop the configuration button to put it at the desired position. The position will be stores in your browser cache.
 
 # Screenshot of current features
 **Kanban View :**
