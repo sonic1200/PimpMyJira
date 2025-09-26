@@ -35,6 +35,7 @@ Please folow the Install Guide which is available here : ['install'](https://git
 **Configuration Popup with drag&drop button:**
 ![Config Screen](https://github.com/sonic1200/PimpMyJira/raw/master/PimpMyJira_Config.png)
 
+
 # Versions
 - **version 5.0** : Update new DOM change detection model to fit with modern browsers implementation based on Mutation Observer. Some refactor to bring a more robust rendering. Upgrade Jquery to a more recent one. Add a new configuration panel to activate/deactivate features on the fly via a new floatting configuration button on the Jira page. You can drag&Drop this config button were you want on the page, the position is stored in browser cache and will remain even after a restart. Adding also a cache configuration to retain the activated/deactivated features.
 - **Version 4.1** : Fix bug with extra fields on JIRA 8. Previous version wasn't working properly when using more than 2 extra fields. You can now use an unlimited number of extra fields in the board configuration.
