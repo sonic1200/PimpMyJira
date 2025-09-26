@@ -21,8 +21,8 @@ Please folow the Install Guide which is available here : ['install'](https://git
 - Be sure to have the extension 'GreaseMonkey' for Firefox or 'TamperMonkey' for Chrome
 - Install or Copy the PimpMyJira.js userscript into the browser extension
 - Go browsing on your JIRA instance.
-- For adding extra fields, on your Board Configuration, in the section ['Card Layout'](https://confluence.atlassian.com/agile/jira-agile-user-s-guide/configuring-a-board/customising-cards#CustomisingCards-fieldsAddingfieldstocards), activate all the extra fields that you want.
-- For configuring Jira card colors, on your Board Configuration, change the colors for each type in the section ['Card colors'](https://confluence.atlassian.com/agile067/jira-agile-user-s-guide/configuring-a-board/customising-cards).
+- For adding extra fields, on your Board Configuration, in the section ['Card Layout'](https://support.atlassian.com/jira-software-cloud/docs/customize-cards/), activate all the extra fields that you want.
+- For configuring Jira card colors, on your Board Configuration, change the colors for each type in the section ['Card colors'](https://support.atlassian.com/jira-software-cloud/docs/customize-cards/).
 - You can activate or deactivate PimpMyJira! features in the new configuration panel integrated on the Jira page.
 
 # Screenshot of current features
