@@ -23,7 +23,7 @@ Please folow the Install Guide which is available here : ['install'](https://git
 - Go browsing on your JIRA instance.
 - For adding extra fields, on your Board Configuration, in the section ['Card Layout'](https://confluence.atlassian.com/agile/jira-agile-user-s-guide/configuring-a-board/customising-cards#CustomisingCards-fieldsAddingfieldstocards), activate all the extra fields that you want.
 - For configuring Jira card colors, on your Board Configuration, change the colors for each type in the section ['Card colors'](https://confluence.atlassian.com/agile067/jira-agile-user-s-guide/configuring-a-board/customising-cards).
-- You can activate or deactivate PimpMyJira! features in the 'configuration section' of the UserScript.
+- You can activate or deactivate PimpMyJira! features in the new configuration panel integrated on the Jira page.
 
 # Screenshot of current features
 **Kanban View :**
@@ -33,6 +33,7 @@ Please folow the Install Guide which is available here : ['install'](https://git
 ![Backlog Board](https://github.com/sonic1200/PimpMyJira/raw/master/screen2.png)
 
 # Versions
+- **version 5.0** : Update new DOM change detection model to fit with modern browsers implementation. Some refactor to bring a more robust rendering. Add a new configuration panel to activate/deactivate features on the fly via a new floatting configuration button on the Jira page. You can drag&Drop this config button were you want on the page, the position is stored in browser cache and will remain even after a restart. Adding also a cache configuration to retain the activated/deactivated features.
 - **Version 4.1** : Fix bug with extra fields on JIRA 8. Previous version wasn't working properly when using more than 2 extra fields. You can now use an unlimited number of extra fields in the board configuration.
 - **Version 4.0** : Stable support for JIRA 8. Extra field placement is now correctly set. Still a known issue with colors not updated correctly (missing refresh event will be added in a future update). Add NEW feature to add color on the Epics button in the Epic panel in backlog view (use the color set from the Epic panel). Reduced height of all lines in backlog view to add more lines on screen (can be switched to OFF in the configuration section of the script). Small cleanup of unused functions.
 - **Version 3.9** : Add preliminary support for JIRA 8. New function to detect Jira version and apply correct script branch. Repair broken extra fields on JIRA 8 - WORK IN PROGRESS - NEED MORE WORK but functionnal. **Known issue** : line colorization is not correctly updated in backlog and sprint view. Partial update. Need to rework this script section. Some code cleanup - Prepare for version 4.0 !
@@ -89,7 +90,6 @@ PimpMyJira! support the following features :
 
 # Future
 
-- ~~Remove the 'timer' for parsing the DOM and find a way to bind to the success to the last Ajax call to render the new DOM.~~ (DONE in v2.0)
 - The userscript should be compatible with 'native' Google Chrome user script system. (without using TamperMonkey)
 - Be able to add different color on each components randomly.
 - Retreive the list of components for a project and give color attribute which is unique for each.
@@ -100,4 +100,4 @@ PimpMyJira! support the following features :
 
 This tool is provided as is and will not be maintained... or maybe... but no confidence!
 You can also contribute to this userscript by sending your pull request.
-PimpMyJira has been tested from Firefox 43.0.4 - 44.0 to latest and Chrome 39.0.2171.71 to latest
+PimpMyJira has been tested from Firefox 143.0.1 to latest and Chrome 140.0.7339.186 to latest
