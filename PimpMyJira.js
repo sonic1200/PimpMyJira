@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name        Pimp My Jira!
 // @description Enhances RapidBoard in Jira with toggles and formatting
+// @author       Nicolas Mivielle
+// @copyright    2025+, Nicolas Mivielle
 // @match       https://*/jira/secure/RapidBoard.jspa*
 // @match       https://*/jira/browse*
 // @match       https://*/jira/projects*
