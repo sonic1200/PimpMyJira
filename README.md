@@ -33,6 +33,7 @@ Please folow the Install Guide which is available here : ['install'](https://git
 ![Backlog Board](https://github.com/sonic1200/PimpMyJira/raw/master/screen2.png)
 
 **Configuration Popup with drag&drop button:**
+
 ![Config Screen](https://github.com/sonic1200/PimpMyJira/raw/master/PimpMyJira_Config.png)
 
 
